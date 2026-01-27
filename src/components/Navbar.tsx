@@ -2,14 +2,20 @@
 import { useState } from 'react';
 
 interface NavbarProps {
-  onNavigate: (section: string) => void;
+  onNavigate?: (section: string) => void;
 }
 
 export default function Navbar({ onNavigate }: NavbarProps) {
   const [open, setOpen] = useState(false);
   
   const handleNavClick = (section: string) => {
-    onNavigate(section);
+    if (onNavigate) {
+      onNavigate(section);
+    } else {
+      // Fallback to route navigation when used in routed pages
+      const href = section === 'home' ? '/' : `/${section}`;
+      window.location.assign(href);
+    }
     setOpen(false);
   };
   
@@ -34,13 +40,24 @@ export default function Navbar({ onNavigate }: NavbarProps) {
             { section: 'projects', label: 'Projects' },
             { section: 'contact', label: 'Contact' },
           ].map((item) => (
-            <button 
-              key={item.section} 
-              onClick={() => handleNavClick(item.section)}
-              className="w-full text-left px-4 py-3 rounded-md font-semibold text-white border border-transparent hover:border-indigo-500 hover:bg-indigo-500/10 transition"
-            >
-              {item.label}
-            </button>
+            onNavigate ? (
+              <button
+                key={item.section}
+                onClick={() => handleNavClick(item.section)}
+                className="w-full text-left px-4 py-3 rounded-md font-semibold text-white border border-transparent hover:border-indigo-500 hover:bg-indigo-500/10 transition"
+              >
+                {item.label}
+              </button>
+            ) : (
+              <a
+                key={item.section}
+                href={item.section === 'home' ? '/' : `/${item.section}`}
+                onClick={() => setOpen(false)}
+                className="block px-4 py-3 rounded-md font-semibold text-white border border-transparent hover:border-indigo-500 hover:bg-indigo-500/10 transition"
+              >
+                {item.label}
+              </a>
+            )
           ))}
         </nav>
       </div>

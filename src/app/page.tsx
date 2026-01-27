@@ -1,12 +1,25 @@
 ﻿'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from "@/components/Navbar";
 
 export default function HomePage() {
   const [currentSection, setCurrentSection] = useState('home');
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const showSection = (section: string) => {
     setCurrentSection(section);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -299,6 +312,19 @@ export default function HomePage() {
       <footer className="w-full border-t border-slate-800 py-8 text-center text-slate-400">
         <p>© Giriraj Patel 2026</p>
       </footer>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center transition-all duration-300 shadow-lg hover:scale-110"
+          aria-label="Scroll to top"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          </svg>
+        </button>
+      )}
     </main>
   );
 }
