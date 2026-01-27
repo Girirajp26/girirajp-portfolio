@@ -3,7 +3,7 @@ import { Raleway } from "next/font/google";
 
 const raleway = Raleway({ subsets: ["latin"], weight: ["300","400","500","600","700","800"] });
 
-export const metadata = { title: "Giriraj Patel | Portfolio", description: "Personal portfolio" };
+export const metadata = { title: "Giriraj Patel | Portfolio", description: "Personal portfolio website - Full-stack developer at Virginia Tech" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
