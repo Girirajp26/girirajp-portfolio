@@ -1,8 +1,18 @@
 ﻿'use client';
 import { useState } from 'react';
 
-export default function Navbar() {
+interface NavbarProps {
+  onNavigate: (section: string) => void;
+}
+
+export default function Navbar({ onNavigate }: NavbarProps) {
   const [open, setOpen] = useState(false);
+  
+  const handleNavClick = (section: string) => {
+    onNavigate(section);
+    setOpen(false);
+  };
+  
   return (
     <>
       <button
@@ -18,16 +28,19 @@ export default function Navbar() {
       <div className={`fixed top-0 right-0 h-screen w-72 bg-slate-900/95 border-l border-slate-700 backdrop-blur-lg z-40 transition-transform ${open ? 'translate-x-0' : 'translate-x-full'}`}>
         <nav className="pt-24 px-6 space-y-3">
           {[
-            { href: '/', label: 'Home' },
-            { href: '/about', label: 'About Me' },
-            { href: '/experience', label: 'Experience' },
-            { href: '/projects', label: 'Projects' },
-            { href: '/contact', label: 'Contact' },
+            { section: 'home', label: 'Home' },
+            { section: 'about', label: 'About Me' },
+            { section: 'experience', label: 'Experience' },
+            { section: 'projects', label: 'Projects' },
+            { section: 'contact', label: 'Contact' },
           ].map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setOpen(false)}
-               className="block px-4 py-3 rounded-md font-semibold text-white border border-transparent hover:border-indigo-500 hover:bg-indigo-500/10">
+            <button 
+              key={item.section} 
+              onClick={() => handleNavClick(item.section)}
+              className="w-full text-left px-4 py-3 rounded-md font-semibold text-white border border-transparent hover:border-indigo-500 hover:bg-indigo-500/10 transition"
+            >
               {item.label}
-            </a>
+            </button>
           ))}
         </nav>
       </div>
